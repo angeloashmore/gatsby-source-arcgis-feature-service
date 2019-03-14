@@ -1,4 +1,4 @@
-# gatsby-source-prismic
+# gatsby-source-arcgis-feature-service
 
 Source plugin for pulling data into [Gatsby][gatsby] from an [ArcGIS Feature
 Service][arcgis-feature-service] via [ArcGIS REST API][arcgis-feature-service-rest-api].
@@ -8,14 +8,9 @@ Service][arcgis-feature-service] via [ArcGIS REST API][arcgis-feature-service-re
 - [Features](#features)
 - [Install](#install)
 - [How to use](#how-to-use)
-- [Providing JSON schemas](#providing-json-schemas)
 - [How to query](#how-to-query)
-  - [Query Rich Text fields](#query-right-text-fields)
-  - [Query Link fields](#query-link-fields)
-  - [Query Content Relation fields](#query-content-relation-fields)
-  - [Query Slices](#query-slices)
-  - [Query direct API data as a fallback](#query-direct-api-data-as-a-fallback)
-  - [Image processing](#image-processing)
+  - [Query Geometry](#query-geometry)
+  - [Query Properties](#query-properties)
 - [Site's `gatsby-node.js` example](#sites-gatsby-nodejs-example)
 
 ## Features
