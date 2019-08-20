@@ -1,11 +1,6 @@
 import url from 'url'
 import got from 'got'
-import {
-  GraphQLJSON,
-  GraphQLNonNull,
-  GraphQLObjectType,
-  GraphQLString,
-} from 'gatsby/graphql'
+import { GraphQLJSON, GraphQLObjectType, GraphQLString } from 'gatsby/graphql'
 import createNodeHelpers from 'gatsby-node-helpers'
 import * as R from 'ramda'
 
