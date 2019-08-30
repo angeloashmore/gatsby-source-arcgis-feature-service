@@ -1,7 +1,8 @@
 # gatsby-source-arcgis-feature-service
 
 Source plugin for pulling data into [Gatsby][gatsby] from an [ArcGIS Feature
-Service][arcgis-feature-service] via [ArcGIS REST API][arcgis-feature-service-rest-api].
+Service][arcgis-feature-service] via [ArcGIS REST
+API][arcgis-feature-service-rest-api].
 
 ## Table of Contents
 
@@ -38,14 +39,14 @@ plugins: [
       // The url of your ArcGIS Feature Service. This is required.
       url: 'https://<catalog-url>/<serviceName>/FeatureServer',
 
-      // A name to namespace your feature data. If you have multiple instances
-      // of this source plugin, this will allow you to query features
-      // independently. This is optional.
+      // A name to identify your feature data. If you have multiple instances
+      // of this source plugin, this will allow you to filter features. This is
+      // optional.
       name: 'myProject',
 
       // Set the request parameters to filter the feature data returned from
-      // the server. The following parameters are the defaults: request
-      // all features and fields in GeoJSON format.
+      // the server. This is optional. The following parameters are the
+      // defaults: request all features and fields in GeoJSON format.
       params: {
         f: 'geojson',
         where: '1=1',
@@ -67,36 +68,27 @@ GraphQL model.
 
 ```graphql
 {
-  allGeoJsonFeature {
-    edges {
-      node {
-        id
-        type
-      }
+  allArcGisFeature {
+    nodes {
+      id
+      type
     }
   }
 }
 ```
 
-All features are pulled from your server and created as `geoJsonFeature` and
-`allGeoJsonFeature`. If you provide `name` as a plugin option, all features are
-created as `${name}GeoJsonFeature` and `all${name}GeoJsonFeature`, where
-`${name}` is the name provided in your options.
+All features are pulled from your server and created as `arcGisFeature` and
+`allArcGisFeature`.
 
-For example, if you have `myProject` as one of your names, you will be able to
-query it like the following:
+If you provide `name` as a plugin option, all features include a `sourceName`
+field with that value which allows you to filter your features.
 
 ```graphql
 {
-  allMyProjectGeoJsonFeatures {
-    edges {
-      node {
-        id
-        geometry {
-          type
-          coordinates
-        }
-      }
+  allArcGisFeature(filter: { sourceName: { eq: "myProject" } }) {
+    nodes {
+      id
+      type
     }
   }
 }
@@ -107,23 +99,18 @@ query it like the following:
 Geometry data for each feature is provided on the `geometry` field per the
 GeoJSON standard.
 
-Coordinates within a feature can vary in shape due to the different types of
-geometry (e.g. Point, Polygon, LineString). To ensure all geometry types can
-be queried reliably, the `coordinates` field is provided as JSON. This means
-you can query `coordinates` and receive deeper data without explicitly stating
-the shape.
+Geometry data within a feature can vary in object shape due to the different
+types of geometry (e.g. Point, Polygon, LineString). To ensure all geometry
+types can be queried reliably, the `geometry` field is provided as JSON. This
+means you can query `geometry` and receive deeper data without explicitly
+stating its fields.
 
 ```graphql
 {
-  allGeoJsonFeature {
-    edges {
-      node {
-        id
-        geometry {
-          type
-          coordinates
-        }
-      }
+  allArcGisFeature {
+    nodes {
+      id
+      geometry
     }
   }
 }
@@ -138,14 +125,12 @@ the ArcGIS Feature Service.
 
 ```graphql
 {
-  allGeoJsonFeature {
-    edges {
-      node {
-        id
-        properties {
-          name
-          status
-        }
+  allArcGisFeature {
+    nodes {
+      id
+      properties {
+        name
+        status
       }
     }
   }
@@ -162,24 +147,22 @@ exports.createPages = async ({ graphql, actions }) => {
 
   const features = await graphql(`
     {
-      allGeoJsonFeature {
-        edges {
-          node {
-            id
-            geoJsonId
-          }
+      allArcGisFeature {
+        nodes {
+          id
+          featureId
         }
       }
     }
   `)
 
-  features.data.allGeoJsonFeature.edges.forEach(edge => {
+  features.data.allArcGisFeature.nodes.forEach(node => {
     createPage({
-      path: `/${edge.node.geoJsonId}`,
+      path: `/${node.geoJsonId}`,
       component: path.resolve('./src/templates/feature.js'),
       context: {
-        id: edge.node.id,
-        geoJsonId: edge.node.geoJsonId,
+        id: node.id,
+        featureId: node.featureId,
       },
     })
   })
@@ -187,5 +170,7 @@ exports.createPages = async ({ graphql, actions }) => {
 ```
 
 [gatsby]: https://www.gatsbyjs.org/
-[arcgis-feature-service]: https://enterprise.arcgis.com/en/server/latest/publish-services/linux/what-is-a-feature-service-.htm
-[arcgis-feature-service-rest-api]: https://developers.arcgis.com/rest/services-reference/feature-service.htm
+[arcgis-feature-service]:
+  https://enterprise.arcgis.com/en/server/latest/publish-services/linux/what-is-a-feature-service-.htm
+[arcgis-feature-service-rest-api]:
+  https://developers.arcgis.com/rest/services-reference/feature-service.htm

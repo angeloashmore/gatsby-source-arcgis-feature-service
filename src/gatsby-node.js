@@ -1,59 +1,49 @@
 import url from 'url'
 import got from 'got'
-import {
-  GraphQLJSON,
-  GraphQLNonNull,
-  GraphQLObjectType,
-  GraphQLString,
-} from 'gatsby/graphql'
-import createNodeHelpers from 'gatsby-node-helpers'
-import * as R from 'ramda'
+import pascalcase from 'pascalcase'
 
-export const sourceNodes = async (gatsbyContext, pluginOptions) => {
-  const { actions } = gatsbyContext
-  const { createNode } = actions
-  const { name, url: urlOption, params } = pluginOptions
-
-  const { createNodeFactory } = createNodeHelpers({
-    typePrefix: name ? `${name}GeoJson` : 'GeoJson',
-  })
-
-  const FeatureNode = createNodeFactory('Feature')
-
-  const resolvedURL = url.resolve(urlOption, '0/query')
-
-  // By default, fetch all features and fields in GeoJSON format.
-  const response = await got(resolvedURL, {
-    json: true,
-    query: {
-      f: 'geojson',
-      where: '1=1',
-      outFields: '*',
-      ...params,
-    },
-  })
-
-  // Create FeatureNodes for each GeoJSON feature
-  R.compose(
-    R.forEach(createNode),
-    R.map(FeatureNode),
-    R.path(['body', 'features']),
-  )(response)
+// Default parameters for the ArcGIS feature server request: fetch all features
+// and fields in GeoJSON format.
+const DEFAULT_PARAMS = {
+  f: 'geojson',
+  where: '1=1',
+  outFields: '*',
 }
 
-export const setFieldsOnGraphQLNodeType = ({ type }) => {
-  // Set geometry.coordinates as type GraphQLJSON
-  if (type.name.endsWith('GeoJsonFeature')) {
-    const GraphQLGeoJSONGeometry = new GraphQLObjectType({
-      name: 'GeoJSONGeometry',
-      fields: {
-        type: { type: GraphQLString },
-        coordinates: { type: GraphQLJSON },
-      },
-    })
+// ArcGIS feature type name.
+const FEATURE_TYPE = 'ArcGisFeature'
 
-    return {
-      geometry: { type: GraphQLGeoJSONGeometry },
+export const sourceNodes = async (gatsbyContext, pluginOptions) => {
+  const { actions, createNodeId, createContentDigest } = gatsbyContext
+  const { createTypes, createNode } = actions
+  const { name, url: serverURL, params } = pluginOptions
+
+  const resolvedURL = url.resolve(serverURL, '0/query')
+  const response = await got(resolvedURL, {
+    json: true,
+    query: { ...DEFAULT_PARAMS, ...params },
+  })
+
+  // Set the geometry field as JSON. This field may have a different shape per
+  // feature and will likely not need direct access to child properties via
+  // GraphQL.
+  createTypes(`
+    type ${FEATURE_TYPE} implements Node {
+      geometry: JSON!
     }
-  }
+  `)
+
+  // Create ArcGisFeature nodes for each feature.
+  response?.body?.features?.forEach?.(feature =>
+    createNode({
+      ...feature,
+      id: createNodeId([name, feature?.id].filter(Boolean).join(' ')),
+      featureId: feature?.id,
+      sourceName: name,
+      internal: {
+        type: FEATURE_TYPE,
+        contentDigest: createContentDigest(feature),
+      },
+    }),
+  )
 }
