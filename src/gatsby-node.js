@@ -16,7 +16,7 @@ const FEATURE_TYPE = 'ArcGisFeature'
 export const sourceNodes = async (gatsbyContext, pluginOptions) => {
   const { actions, createNodeId, createContentDigest } = gatsbyContext
   const { createTypes, createNode } = actions
-  const { name: namespace, url: serverURL, params } = pluginOptions
+  const { name, url: serverURL, params } = pluginOptions
 
   const resolvedURL = url.resolve(serverURL, '0/query')
   const response = await got(resolvedURL, {
@@ -24,15 +24,11 @@ export const sourceNodes = async (gatsbyContext, pluginOptions) => {
     query: { ...DEFAULT_PARAMS, ...params },
   })
 
-  const nodeType = pascalcase(
-    [FEATURE_TYPE, namespace].filter(Boolean).join(' '),
-  )
-
   // Set the geometry field as JSON. This field may have a different shape per
   // feature and will likely not need direct access to child properties via
   // GraphQL.
   createTypes(`
-    type ${nodeType} implements Node {
+    type ${FEATURE_TYPE} implements Node {
       geometry: JSON!
     }
   `)
@@ -41,10 +37,11 @@ export const sourceNodes = async (gatsbyContext, pluginOptions) => {
   response?.body?.features?.forEach?.(feature =>
     createNode({
       ...feature,
-      id: createNodeId([namespace, feature?.id].filter(Boolean).join(' ')),
+      id: createNodeId([name, feature?.id].filter(Boolean).join(' ')),
       featureId: feature?.id,
+      sourceName: name,
       internal: {
-        type: nodeType,
+        type: FEATURE_TYPE,
         contentDigest: createContentDigest(feature),
       },
     }),
