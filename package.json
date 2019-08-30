@@ -27,6 +27,7 @@
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.5.5",
+    "@babel/plugin-proposal-optional-chaining": "^7.2.0",
     "@babel/preset-env": "^7.5.5",
     "@commitlint/cli": "^8.1.0",
     "@commitlint/config-conventional": "^8.1.0",
@@ -40,9 +41,8 @@
     "standard-version": "^7.0.0"
   },
   "dependencies": {
-    "gatsby-node-helpers": "^0.3.0",
     "got": "^9.6.0",
-    "ramda": "^0.26.1"
+    "pascalcase": "^1.0.0"
   },
   "peerDependencies": {
     "gatsby": ">=2"
