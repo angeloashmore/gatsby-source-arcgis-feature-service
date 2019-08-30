@@ -1,6 +1,5 @@
 import url from 'url'
 import got from 'got'
-import pascalcase from 'pascalcase'
 
 // Default parameters for the ArcGIS feature server request: fetch all features
 // and fields in GeoJSON format.
