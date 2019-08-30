@@ -40,13 +40,13 @@ plugins: [
       url: 'https://<catalog-url>/<serviceName>/FeatureServer',
 
       // A name to identify your feature data. If you have multiple instances
-      // of this source plugin, this will allow you to query features
-      // independently. This is optional.
+      // of this source plugin, this will allow you to filter features. This is
+      // optional.
       name: 'myProject',
 
       // Set the request parameters to filter the feature data returned from
-      // the server. The following parameters are the defaults: request
-      // all features and fields in GeoJSON format.
+      // the server. This is optional. The following parameters are the
+      // defaults: request all features and fields in GeoJSON format.
       params: {
         f: 'geojson',
         where: '1=1',
