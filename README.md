@@ -85,7 +85,7 @@ field with that value which allows you to filter your features.
 
 ```graphql
 {
-  allArcGisFeature(filter: { sourceName: "myProject" }) {
+  allArcGisFeature(filter: { sourceName: { eq: "myProject" } }) {
     nodes {
       id
       type
