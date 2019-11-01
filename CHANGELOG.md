@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.1](https://github.com/angeloashmore/gatsby-source-arcgis-feature-service/compare/v0.2.0...v0.2.1) (2019-11-01)
+
+
+### Bug Fixes
+
+* add .npmignore file to include dist in prod ([0bdff5e](https://github.com/angeloashmore/gatsby-source-arcgis-feature-service/commit/0bdff5e))
+
 ## [0.2.0](https://github.com/angeloashmore/gatsby-source-arcgis-feature-service/compare/v0.1.3...v0.2.0) (2019-08-30)
 
 
