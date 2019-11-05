@@ -1,5 +1,6 @@
 import url from 'url'
 import got from 'got'
+import polylabel from 'polylabel'
 
 // Default parameters for the ArcGIS feature server request: fetch all features
 // and fields in GeoJSON format.
@@ -33,16 +34,19 @@ export const sourceNodes = async (gatsbyContext, pluginOptions) => {
   `)
 
   // Create ArcGisFeature nodes for each feature.
-  response?.body?.features?.forEach?.(feature =>
+  response?.body?.features?.forEach?.(feature => {
+    const polyLabel = polylabel(feature.geometry, 1.0)
+
     createNode({
       ...feature,
       id: createNodeId([name, feature?.id].filter(Boolean).join(' ')),
       featureId: feature?.id,
+      polyLabel,
       sourceName: name,
       internal: {
         type: FEATURE_TYPE,
         contentDigest: createContentDigest(feature),
       },
-    }),
-  )
+    })
+  })
 }
