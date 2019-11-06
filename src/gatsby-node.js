@@ -30,23 +30,22 @@ export const sourceNodes = async (gatsbyContext, pluginOptions) => {
   createTypes(`
     type ${FEATURE_TYPE} implements Node {
       geometry: JSON!
+      raw: JSON!
     }
   `)
 
   // Create ArcGisFeature nodes for each feature.
-  response?.body?.features?.forEach?.(feature => {
-    const polyLabel = polylabel(feature.geometry, 1.0)
-
+  response?.body?.features?.forEach?.(feature =>
     createNode({
       ...feature,
       id: createNodeId([name, feature?.id].filter(Boolean).join(' ')),
       featureId: feature?.id,
-      polyLabel,
+      polylabel: polylabel(feature.geometry.coordinates, 0.1),
       sourceName: name,
       internal: {
         type: FEATURE_TYPE,
         contentDigest: createContentDigest(feature),
       },
-    })
-  })
+    }),
+  )
 }

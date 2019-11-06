@@ -137,6 +137,14 @@ the ArcGIS Feature Service.
 }
 ```
 
+### Query Polylabel
+
+Polylabel data (see: [polylabel](https://github.com/mapbox/polylabel)) is
+provided on the `polylabel` field.
+
+`polylabel` is a longitude, latitude tuple of the most distant, internal point
+from the polygon outline.
+
 ## Site's `gatsby-node.js` example
 
 ```js
