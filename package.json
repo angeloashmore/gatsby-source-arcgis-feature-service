@@ -41,7 +41,8 @@
     "standard-version": "^7.0.0"
   },
   "dependencies": {
-    "got": "^9.6.0"
+    "got": "^9.6.0",
+    "polylabel": "^1.0.2"
   },
   "peerDependencies": {
     "gatsby": ">=2"
