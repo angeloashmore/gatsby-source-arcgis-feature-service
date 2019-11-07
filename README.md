@@ -6,13 +6,16 @@ API][arcgis-feature-service-rest-api].
 
 ## Table of Contents
 
-- [Features](#features)
-- [Install](#install)
-- [How to use](#how-to-use)
-- [How to query](#how-to-query)
-  - [Query Geometry](#query-geometry)
-  - [Query Properties](#query-properties)
-- [Site's `gatsby-node.js` example](#sites-gatsby-nodejs-example)
+- [gatsby-source-arcgis-feature-service](#gatsby-source-arcgis-feature-service)
+  - [Table of Contents](#table-of-contents)
+  - [Features](#features)
+  - [Install](#install)
+  - [How to use](#how-to-use)
+  - [How to query](#how-to-query)
+    - [Query Geometry](#query-geometry)
+    - [Query Properties](#query-properties)
+    - [Query Polylabel](#query-polylabel)
+  - [Site's `gatsby-node.js` example](#sites-gatsby-nodejs-example)
 
 ## Features
 
@@ -144,6 +147,17 @@ provided on the `polylabel` field.
 
 `polylabel` is a longitude, latitude tuple of the most distant, internal point
 from the polygon outline.
+
+```graphql
+{
+  allArcGisFeature {
+    nodes {
+      id
+      polylabel
+    }
+  }
+}
+```
 
 ## Site's `gatsby-node.js` example
 
