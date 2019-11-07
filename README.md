@@ -140,9 +140,7 @@ the ArcGIS Feature Service.
 
 ### Query Polylabel
 
-Polylabel data is provided on the `polylabel` field.
-
-Polylabel data is provided on the `polylabel` field.
+Polylabel data is provided on the `polylabel` field for `Polygon` features. If a feature is not a `Polygon`, `polylabel` will be `null`.
 
 `polylabel` is the optimal point within a polygon to place a marker or label
 provided as a [lng, lat] pair.
@@ -197,5 +195,4 @@ exports.createPages = async ({ graphql, actions }) => {
   https://enterprise.arcgis.com/en/server/latest/publish-services/linux/what-is-a-feature-service-.htm
 [arcgis-feature-service-rest-api]:
   https://developers.arcgis.com/rest/services-reference/feature-service.htm
-
-[polylabel](https://github.com/mapbox/polylabel)
+[polylabel]: https://github.com/mapbox/polylabel
