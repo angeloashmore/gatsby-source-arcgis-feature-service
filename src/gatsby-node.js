@@ -30,7 +30,6 @@ export const sourceNodes = async (gatsbyContext, pluginOptions) => {
   createTypes(`
     type ${FEATURE_TYPE} implements Node {
       geometry: JSON!
-      raw: JSON!
     }
   `)
 

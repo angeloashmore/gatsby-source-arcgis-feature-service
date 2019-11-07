@@ -1,21 +1,19 @@
-# gatsby-source-arcgis-feature-service
+# gatsby-source-arcgis-feature-service <!-- omit in toc -->
 
 Source plugin for pulling data into [Gatsby][gatsby] from an [ArcGIS Feature
 Service][arcgis-feature-service] via [ArcGIS REST
 API][arcgis-feature-service-rest-api].
 
-## Table of Contents
+## Table of Contents <!-- omit in toc -->
 
-- [gatsby-source-arcgis-feature-service](#gatsby-source-arcgis-feature-service)
-  - [Table of Contents](#table-of-contents)
-  - [Features](#features)
-  - [Install](#install)
-  - [How to use](#how-to-use)
-  - [How to query](#how-to-query)
-    - [Query Geometry](#query-geometry)
-    - [Query Properties](#query-properties)
-    - [Query Polylabel](#query-polylabel)
-  - [Site's `gatsby-node.js` example](#sites-gatsby-nodejs-example)
+- [Features](#features)
+- [Install](#install)
+- [How to use](#how-to-use)
+- [How to query](#how-to-query)
+  - [Query Geometry](#query-geometry)
+  - [Query Properties](#query-properties)
+  - [Query Polylabel](#query-polylabel)
+- [Site's `gatsby-node.js` example](#sites-gatsby-nodejs-example)
 
 ## Features
 
@@ -142,11 +140,14 @@ the ArcGIS Feature Service.
 
 ### Query Polylabel
 
-Polylabel data (see: [polylabel](https://github.com/mapbox/polylabel)) is
-provided on the `polylabel` field.
+Polylabel data is provided on the `polylabel` field.
 
-`polylabel` is a longitude, latitude tuple of the most distant, internal point
-from the polygon outline.
+Polylabel data is provided on the `polylabel` field.
+
+`polylabel` is the optimal point within a polygon to place a marker or label
+provided as a [lng, lat] pair.
+
+See [Mapbox's official Polylabel documentation][polylabel] for more details.
 
 ```graphql
 {
@@ -196,3 +197,5 @@ exports.createPages = async ({ graphql, actions }) => {
   https://enterprise.arcgis.com/en/server/latest/publish-services/linux/what-is-a-feature-service-.htm
 [arcgis-feature-service-rest-api]:
   https://developers.arcgis.com/rest/services-reference/feature-service.htm
+
+[polylabel](https://github.com/mapbox/polylabel)
