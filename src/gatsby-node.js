@@ -14,7 +14,7 @@ const DEFAULT_PARAMS = {
 const FEATURE_TYPE = 'ArcGisFeature'
 
 export const sourceNodes = async (gatsbyContext, pluginOptions) => {
-  const { actions, createNodeId, createContentDigest } = gatsbyContext
+  const { actions, createNodeId, createContentDigest, schema } = gatsbyContext
   const { createTypes, createNode } = actions
   const { name, url: serverURL, params } = pluginOptions
 
@@ -27,11 +27,16 @@ export const sourceNodes = async (gatsbyContext, pluginOptions) => {
   // Set the geometry field as JSON. This field may have a different shape per
   // feature and will likely not need direct access to child properties via
   // GraphQL.
-  createTypes(`
-    type ${FEATURE_TYPE} implements Node {
-      geometry: JSON!
-    }
-  `)
+  createTypes(
+    schema.buildObjectType({
+      name: FEATURE_TYPE,
+      fields: {
+        geometry: 'JSON!',
+      },
+      interfaces: ['Node'],
+      extensions: { infer: false },
+    }),
+  )
 
   // Create ArcGisFeature nodes for each feature.
   response?.body?.features?.forEach?.(feature =>

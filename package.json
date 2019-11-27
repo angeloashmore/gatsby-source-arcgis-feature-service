@@ -8,7 +8,8 @@
     "format": "prettier --write 'src/**/*.js' 'rollup.config.js' 'docs/**/*.md'",
     "prebuild": "rimraf dist",
     "prepare": "npm run build",
-    "release": "standard-version"
+    "release": "standard-version",
+    "test": "jest"
   },
   "homepage": "https://github.com/angeloashmore/gatsby-source-arcgis-feature-service",
   "repository": {
@@ -32,8 +33,11 @@
     "@commitlint/cli": "^8.1.0",
     "@commitlint/config-conventional": "^8.1.0",
     "babel-eslint": "^10.0.3",
+    "babel-jest": "^24.9.0",
     "eslint": "^6.2.2",
+    "eslint-plugin-jest": "^23.0.5",
     "husky": "^3.0.4",
+    "jest": "^24.9.0",
     "prettier": "^1.18.2",
     "rollup": "^1.20.3",
     "rollup-plugin-babel": "^4.3.3",
@@ -44,9 +48,7 @@
     "got": "^9.6.0",
     "polylabel": "^1.0.2"
   },
-  "peerDependencies": {
-    "gatsby": ">=2"
-  },
+  "peerDependencies": {},
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"

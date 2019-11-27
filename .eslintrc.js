@@ -1,4 +1,6 @@
 module.exports = {
+  plugins: ['jest'],
+  extends: ['plugin:jest/recommended'],
   rules: {
     'no-var': 'warn',
     'no-unused-vars': 'warn',
@@ -10,6 +12,6 @@ module.exports = {
   },
   parser: 'babel-eslint',
   parserOptions: {
-    ecmaVersion: 8, // optional, recommended 6+
+    ecmaVersion: 11, // optional, recommended 6+
   },
 }
