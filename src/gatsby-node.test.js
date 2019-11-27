@@ -52,7 +52,10 @@ test('creates ArcGisFeature nodes', async () => {
   expect(gatsbyContext.actions.createTypes).toHaveBeenCalledWith({
     name: 'ArcGisFeature',
     fields: {
+      featureId: 'ID!',
       geometry: 'JSON!',
+      polylabel: '[Float!]',
+      sourceName: 'String',
     },
     interfaces: ['Node'],
     extensions: { infer: false },

@@ -10,6 +10,9 @@ const DEFAULT_PARAMS = {
   outFields: '*',
 }
 
+// ArcGIS feature server query endpoint path.
+const URL_PATH = '0/query'
+
 // ArcGIS feature type name.
 const FEATURE_TYPE = 'ArcGisFeature'
 
@@ -18,7 +21,7 @@ export const sourceNodes = async (gatsbyContext, pluginOptions) => {
   const { createTypes, createNode } = actions
   const { name, url: serverURL, params } = pluginOptions
 
-  const resolvedURL = url.resolve(serverURL, '0/query')
+  const resolvedURL = url.resolve(serverURL, URL_PATH)
   const response = await got(resolvedURL, {
     json: true,
     query: { ...DEFAULT_PARAMS, ...params },
@@ -31,7 +34,10 @@ export const sourceNodes = async (gatsbyContext, pluginOptions) => {
     schema.buildObjectType({
       name: FEATURE_TYPE,
       fields: {
+        featureId: 'ID!',
         geometry: 'JSON!',
+        polylabel: '[Float!]',
+        sourceName: 'String',
       },
       interfaces: ['Node'],
       extensions: { infer: false },
