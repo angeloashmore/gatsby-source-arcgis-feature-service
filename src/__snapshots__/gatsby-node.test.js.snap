@@ -1,0 +1,97 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`creates ArcGisFeature nodes 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "
+    \\"A GeoJSON feature from an ArcGIS feature service.\\"
+    type ArcGisFeature implements Node @dontInfer {
+      \\"The feature's ID within the ArcGIS feature service.\\"
+      featureId: ID!
+
+      \\"GeoJSON geometry data. Child fields do **not** need to be queried individually.\\"
+      geometry: JSON
+
+      \\"If the feature is a polygon, this is the optimal point within the polygon for a label.\\"
+      polylabel: [Float!]
+
+      \\"If provided in the plugin options, this is the name given to the plugin to categorize multiple feature services.\\"
+      sourceName: String
+
+      \\"The feature's GeoJSON type.\\"
+      type: String!
+
+      \\"The feature's GeoJSON type.\\"
+      properties: ArcGisFeatureProperties @link
+    }
+  ",
+    ],
+    Array [
+      "
+    \\"ArcGIS GeoJSON feature properties.\\"
+    type ArcGisFeatureProperties implements Node @infer {
+      \\"If provided in the plugin options, this is the name given to the plugin to categorize multiple feature services.\\"
+      sourceName: String
+    }
+  ",
+    ],
+  ],
+  "results": Array [
+    Object {
+      "type": "return",
+      "value": undefined,
+    },
+    Object {
+      "type": "return",
+      "value": undefined,
+    },
+  ],
+}
+`;
+
+exports[`creates ArcGisFeature nodes 2`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      Object {
+        "featureId": "id",
+        "id": "createNodeId",
+        "internal": Object {
+          "contentDigest": "createContentDigest",
+          "type": "ArcGisFeature",
+        },
+        "polylabel": Array [
+          5,
+          5,
+        ],
+        "properties": "createNodeId",
+        "sourceName": "test-source",
+        "type": undefined,
+      },
+    ],
+    Array [
+      Object {
+        "bar": "baz",
+        "foo": "bar",
+        "id": "createNodeId",
+        "internal": Object {
+          "contentDigest": "createContentDigest",
+          "type": "ArcGisFeatureProperties",
+        },
+        "sourceName": "test-source",
+      },
+    ],
+  ],
+  "results": Array [
+    Object {
+      "type": "return",
+      "value": undefined,
+    },
+    Object {
+      "type": "return",
+      "value": undefined,
+    },
+  ],
+}
+`;
