@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/angeloashmore/gatsby-source-arcgis-feature-service/compare/v0.2.2...v0.3.0) (2019-11-28)
+
+
+### Features
+
+* add graphql documentation ([eb60362](https://github.com/angeloashmore/gatsby-source-arcgis-feature-service/commit/eb603628a1a87a6ed3a595de2a8db54f65700fde))
+* infer properties, but not main feature node ([c12a911](https://github.com/angeloashmore/gatsby-source-arcgis-feature-service/commit/c12a91153f6c44cdaec5fc2c53a2295f3de927a6))
+* remove field inferring ([032f7e1](https://github.com/angeloashmore/gatsby-source-arcgis-feature-service/commit/032f7e1d3775a2c99b1a5e83ccf0bf8f20ecefd6))
+
 ### [0.2.2](https://github.com/angeloashmore/gatsby-source-arcgis-feature-service/compare/v0.2.1...v0.2.2) (2019-11-08)
 
 
