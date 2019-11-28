@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.1](https://github.com/angeloashmore/gatsby-source-arcgis-feature-service/compare/v0.3.0...v0.3.1) (2019-11-28)
+
+
+### Bug Fixes
+
+* restore geometry property ([6a87176](https://github.com/angeloashmore/gatsby-source-arcgis-feature-service/commit/6a87176f52e3d732dc85e09ab6db489f8677254a))
+
 ## [0.3.0](https://github.com/angeloashmore/gatsby-source-arcgis-feature-service/compare/v0.2.2...v0.3.0) (2019-11-28)
 
 
