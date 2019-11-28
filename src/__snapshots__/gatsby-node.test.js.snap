@@ -56,6 +56,29 @@ exports[`creates ArcGisFeature nodes 2`] = `
     Array [
       Object {
         "featureId": "id",
+        "geometry": Object {
+          "coordinates": Array [
+            Array [
+              Array [
+                0,
+                0,
+              ],
+              Array [
+                10,
+                0,
+              ],
+              Array [
+                10,
+                10,
+              ],
+              Array [
+                0,
+                10,
+              ],
+            ],
+          ],
+          "type": "Polygon",
+        },
         "id": "createNodeId",
         "internal": Object {
           "contentDigest": "createContentDigest",

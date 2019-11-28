@@ -74,6 +74,7 @@ export const sourceNodes = async (gatsbyContext, pluginOptions) => {
     createNode({
       id: featureId,
       featureId: feature?.id,
+      geometry: feature.geometry,
       polylabel:
         feature.geometry.type === 'Polygon'
           ? polylabel(feature.geometry.coordinates, 0.1)
