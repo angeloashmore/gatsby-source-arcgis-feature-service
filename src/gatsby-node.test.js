@@ -55,45 +55,8 @@ test('creates ArcGisFeature nodes', async () => {
     query: { f: 'geojson', outFields: '*', where: '1=1' },
   })
 
-  expect(gatsbyContext.actions.createTypes).toHaveBeenCalledWith({
-    name: 'ArcGisFeature',
-    fields: {
-      featureId: {
-        type: 'ID!',
-        description: "The feature's ID within the ArcGIS feature service.",
-      },
-      geometry: {
-        type: 'JSON!',
-        description:
-          'GeoJSON geometry data. Child fields do **not** need to be queried individually.',
-      },
-      polylabel: {
-        type: '[Float!]',
-        description:
-          'If feature is a polygon, this is the optimal point within the polygon for a label.',
-      },
-      sourceName: {
-        type: 'String',
-        description:
-          'If provided in the plugin options, this is the name given to the plugin to categorize multiple feature services.',
-      },
-      type: { type: 'String!', description: "The feature's GeoJSON type." },
-    },
-    interfaces: ['Node'],
-  })
-
-  expect(gatsbyContext.actions.createNode).toHaveBeenCalledWith({
-    id: 'createNodeId',
-    featureId: mockFeature.id,
-    polylabel: [5, 5],
-    sourceName: 'test-source',
-    type: mockFeature.type,
-    properties: mockFeature.properties,
-    internal: {
-      contentDigest: 'createContentDigest',
-      type: 'ArcGisFeature',
-    },
-  })
+  expect(gatsbyContext.actions.createTypes).toMatchSnapshot()
+  expect(gatsbyContext.actions.createNode).toMatchSnapshot()
 })
 
 test('allows setting/overriding query params from plugin options', async () => {

@@ -16,8 +16,11 @@ const URL_PATH = '0/query'
 // ArcGIS feature type name.
 const FEATURE_TYPE = 'ArcGisFeature'
 
+// ArcGIS feature properties type name.
+const FEATURE_PROPERTIES_TYPE = 'ArcGisFeatureProperties'
+
 export const sourceNodes = async (gatsbyContext, pluginOptions) => {
-  const { actions, createNodeId, createContentDigest, schema } = gatsbyContext
+  const { actions, createNodeId, createContentDigest } = gatsbyContext
   const { createTypes, createNode } = actions
   const { name, url: serverURL, params } = pluginOptions
 
@@ -27,39 +30,49 @@ export const sourceNodes = async (gatsbyContext, pluginOptions) => {
     query: { ...DEFAULT_PARAMS, ...params },
   })
 
-  createTypes(
-    schema.buildObjectType({
-      name: FEATURE_TYPE,
-      fields: {
-        featureId: {
-          type: 'ID!',
-          description: "The feature's ID within the ArcGIS feature service.",
-        },
-        geometry: {
-          type: 'JSON!',
-          description:
-            'GeoJSON geometry data. Child fields do **not** need to be queried individually.',
-        },
-        polylabel: {
-          type: '[Float!]',
-          description:
-            'If feature is a polygon, this is the optimal point within the polygon for a label.',
-        },
-        sourceName: {
-          type: 'String',
-          description:
-            'If provided in the plugin options, this is the name given to the plugin to categorize multiple feature services.',
-        },
-        type: { type: 'String!', description: "The feature's GeoJSON type." },
-      },
-      interfaces: ['Node'],
-    }),
-  )
+  createTypes(`
+    "A GeoJSON feature from an ArcGIS feature service."
+    type ${FEATURE_TYPE} implements Node @dontInfer {
+      "The feature's ID within the ArcGIS feature service."
+      featureId: ID!
+
+      "GeoJSON geometry data. Child fields do **not** need to be queried individually."
+      geometry: JSON
+
+      "If the feature is a polygon, this is the optimal point within the polygon for a label."
+      polylabel: [Float!]
+
+      "If provided in the plugin options, this is the name given to the plugin to categorize multiple feature services."
+      sourceName: String
+
+      "The feature's GeoJSON type."
+      type: String!
+
+      "The feature's GeoJSON type."
+      properties: ArcGisFeatureProperties @link
+    }
+  `)
+
+  // Implemented as a separate type because we want to infer this type.
+  createTypes(`
+    "ArcGIS GeoJSON feature properties."
+    type ${FEATURE_PROPERTIES_TYPE} implements Node @infer {
+      "If provided in the plugin options, this is the name given to the plugin to categorize multiple feature services."
+      sourceName: String
+    }
+  `)
 
   // Create ArcGisFeature nodes for each feature.
-  response?.body?.features?.forEach?.(feature =>
+  response?.body?.features?.forEach?.(feature => {
+    const featureId = createNodeId(
+      [name, feature?.id].filter(Boolean).join(' '),
+    )
+    const propertiesId = createNodeId(
+      [name, feature?.id, 'properties'].filter(Boolean).join(' '),
+    )
+
     createNode({
-      id: createNodeId([name, feature?.id].filter(Boolean).join(' ')),
+      id: featureId,
       featureId: feature?.id,
       polylabel:
         feature.geometry.type === 'Polygon'
@@ -67,11 +80,21 @@ export const sourceNodes = async (gatsbyContext, pluginOptions) => {
           : null,
       sourceName: name,
       type: feature.type,
-      properties: feature.properties,
+      properties: propertiesId,
       internal: {
         type: FEATURE_TYPE,
         contentDigest: createContentDigest(feature),
       },
-    }),
-  )
+    })
+
+    createNode({
+      ...feature.properties,
+      id: propertiesId,
+      sourceName: name,
+      internal: {
+        type: FEATURE_PROPERTIES_TYPE,
+        contentDigest: createContentDigest(feature.properties),
+      },
+    })
+  })
 }
