@@ -4,9 +4,7 @@
   "description": "Gatsby source plugin for building websites using an ArcGIS Feature Service as a data source",
   "scripts": {
     "build": "NODE_ENV=production rollup -c",
-    "build:watch": "npm run build -- --watch",
     "format": "prettier --write 'src/**/*.js' 'rollup.config.js' 'docs/**/*.md'",
-    "prebuild": "rimraf dist",
     "prepare": "npm run build",
     "release": "standard-version",
     "test": "jest"
@@ -27,22 +25,22 @@
   "author": "Angelo Ashmore <angelo.ashmore@walltowall.com>",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.5.5",
-    "@babel/plugin-proposal-optional-chaining": "^7.2.0",
-    "@babel/preset-env": "^7.5.5",
-    "@commitlint/cli": "^8.1.0",
-    "@commitlint/config-conventional": "^8.1.0",
+    "@babel/core": "^7.7.4",
+    "@babel/plugin-proposal-optional-chaining": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
+    "@commitlint/cli": "^8.2.0",
+    "@commitlint/config-conventional": "^8.2.0",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.9.0",
-    "eslint": "^6.2.2",
+    "eslint": "^6.7.1",
     "eslint-plugin-jest": "^23.0.5",
-    "husky": "^3.0.4",
+    "husky": "^3.1.0",
     "jest": "^24.9.0",
-    "prettier": "^1.18.2",
-    "rollup": "^1.20.3",
+    "prettier": "^1.19.1",
+    "rollup": "^1.27.5",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-clear": "^2.0.7",
-    "standard-version": "^7.0.0"
+    "standard-version": "^7.0.1"
   },
   "dependencies": {
     "got": "^9.6.0",
