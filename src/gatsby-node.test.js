@@ -7,10 +7,16 @@ const mockFeature = {
     type: 'Polygon',
     coordinates: [[[0, 0], [10, 0], [10, 10], [0, 10]]],
   },
+  // Arbitrary properties from the ArcGIS feature service.
+  properties: {
+    foo: 'bar',
+    bar: 'baz',
+  },
+  // Ensure stray properties are **not** included.
   foo: 'bar',
 }
 
-// got is used to fetch JSON data from the ArcGIS Feature Server. We need to
+// got is used to fetch JSON data from the ArcGIS Feature service. We need to
 // mock its return value in tests.
 jest.mock('got')
 got.mockImplementation((url, options) => {
@@ -52,21 +58,37 @@ test('creates ArcGisFeature nodes', async () => {
   expect(gatsbyContext.actions.createTypes).toHaveBeenCalledWith({
     name: 'ArcGisFeature',
     fields: {
-      featureId: 'ID!',
-      geometry: 'JSON!',
-      polylabel: '[Float!]',
-      sourceName: 'String',
+      featureId: {
+        type: 'ID!',
+        description: "The feature's ID within the ArcGIS feature service.",
+      },
+      geometry: {
+        type: 'JSON!',
+        description:
+          'GeoJSON geometry data. Child fields do **not** need to be queried individually.',
+      },
+      polylabel: {
+        type: '[Float!]',
+        description:
+          'If feature is a polygon, this is the optimal point within the polygon for a label.',
+      },
+      sourceName: {
+        type: 'String',
+        description:
+          'If provided in the plugin options, this is the name given to the plugin to categorize multiple feature services.',
+      },
+      type: { type: 'String!', description: "The feature's GeoJSON type." },
     },
     interfaces: ['Node'],
-    extensions: { infer: false },
   })
 
   expect(gatsbyContext.actions.createNode).toHaveBeenCalledWith({
-    ...mockFeature,
     id: 'createNodeId',
-    featureId: 'id',
+    featureId: mockFeature.id,
     polylabel: [5, 5],
     sourceName: 'test-source',
+    type: mockFeature.type,
+    properties: mockFeature.properties,
     internal: {
       contentDigest: 'createContentDigest',
       type: 'ArcGisFeature',

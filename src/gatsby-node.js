@@ -2,15 +2,15 @@ import url from 'url'
 import got from 'got'
 import polylabel from 'polylabel'
 
-// Default parameters for the ArcGIS feature server request: fetch all features
-// and fields in GeoJSON format.
+// Default parameters for the ArcGIS feature service request: fetch all
+// features and fields in GeoJSON format.
 const DEFAULT_PARAMS = {
   f: 'geojson',
   where: '1=1',
   outFields: '*',
 }
 
-// ArcGIS feature server query endpoint path.
+// ArcGIS feature service query endpoint path.
 const URL_PATH = '0/query'
 
 // ArcGIS feature type name.
@@ -27,27 +27,38 @@ export const sourceNodes = async (gatsbyContext, pluginOptions) => {
     query: { ...DEFAULT_PARAMS, ...params },
   })
 
-  // Set the geometry field as JSON. This field may have a different shape per
-  // feature and will likely not need direct access to child properties via
-  // GraphQL.
   createTypes(
     schema.buildObjectType({
       name: FEATURE_TYPE,
       fields: {
-        featureId: 'ID!',
-        geometry: 'JSON!',
-        polylabel: '[Float!]',
-        sourceName: 'String',
+        featureId: {
+          type: 'ID!',
+          description: "The feature's ID within the ArcGIS feature service.",
+        },
+        geometry: {
+          type: 'JSON!',
+          description:
+            'GeoJSON geometry data. Child fields do **not** need to be queried individually.',
+        },
+        polylabel: {
+          type: '[Float!]',
+          description:
+            'If feature is a polygon, this is the optimal point within the polygon for a label.',
+        },
+        sourceName: {
+          type: 'String',
+          description:
+            'If provided in the plugin options, this is the name given to the plugin to categorize multiple feature services.',
+        },
+        type: { type: 'String!', description: "The feature's GeoJSON type." },
       },
       interfaces: ['Node'],
-      extensions: { infer: false },
     }),
   )
 
   // Create ArcGisFeature nodes for each feature.
   response?.body?.features?.forEach?.(feature =>
     createNode({
-      ...feature,
       id: createNodeId([name, feature?.id].filter(Boolean).join(' ')),
       featureId: feature?.id,
       polylabel:
@@ -55,6 +66,8 @@ export const sourceNodes = async (gatsbyContext, pluginOptions) => {
           ? polylabel(feature.geometry.coordinates, 0.1)
           : null,
       sourceName: name,
+      type: feature.type,
+      properties: feature.properties,
       internal: {
         type: FEATURE_TYPE,
         contentDigest: createContentDigest(feature),
