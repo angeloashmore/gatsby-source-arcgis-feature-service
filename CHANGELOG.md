@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.0-beta.0](https://github.com/angeloashmore/gatsby-source-arcgis-feature-service/compare/v0.3.1...v0.4.0-beta.0) (2020-01-03)
+
+
+### Features
+
+* add centroid, multiCentroid, and multiPolylabel fields ([01f9dc4](https://github.com/angeloashmore/gatsby-source-arcgis-feature-service/commit/01f9dc445d7c5319f72c72fa75b36eba0ad97eae))
+
 ### [0.3.1](https://github.com/angeloashmore/gatsby-source-arcgis-feature-service/compare/v0.3.0...v0.3.1) (2019-11-28)
 
 
