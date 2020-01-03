@@ -13,8 +13,17 @@ exports[`creates ArcGisFeature nodes 1`] = `
       \\"GeoJSON geometry data. Child fields do **not** need to be queried individually.\\"
       geometry: JSON
 
-      \\"If the feature is a polygon, this is the optimal point within the polygon for a label.\\"
+      \\"The center point within a feature.\\"
+      centroid: [Float!]
+
+      \\"If the feature is a Polygon, this is the optimal point within the polygon for a label.\\"
       polylabel: [Float!]
+
+      \\"If the feature is a MultiPolygon, this is an array of center points within each polygon.\\"
+      multiCentroids: [[Float!]]
+
+      \\"If the feature is a MultiPolygon, this is an array of optimal points within each polygon for a label.\\"
+      multiPolylabels: [[Float!]]
 
       \\"If provided in the plugin options, this is the name given to the plugin to categorize multiple feature services.\\"
       sourceName: String
@@ -55,38 +64,80 @@ exports[`creates ArcGisFeature nodes 2`] = `
   "calls": Array [
     Array [
       Object {
+        "centroid": Array [
+          5,
+          5,
+        ],
         "featureId": "id",
         "geometry": Object {
           "coordinates": Array [
             Array [
               Array [
-                0,
-                0,
+                Array [
+                  0,
+                  0,
+                ],
+                Array [
+                  10,
+                  0,
+                ],
+                Array [
+                  10,
+                  10,
+                ],
+                Array [
+                  0,
+                  10,
+                ],
               ],
+            ],
+            Array [
               Array [
-                10,
-                0,
-              ],
-              Array [
-                10,
-                10,
-              ],
-              Array [
-                0,
-                10,
+                Array [
+                  0,
+                  0,
+                ],
+                Array [
+                  10,
+                  0,
+                ],
+                Array [
+                  10,
+                  10,
+                ],
+                Array [
+                  0,
+                  10,
+                ],
               ],
             ],
           ],
-          "type": "Polygon",
+          "type": "MultiPolygon",
         },
         "id": "createNodeId",
         "internal": Object {
           "contentDigest": "createContentDigest",
           "type": "ArcGisFeature",
         },
-        "polylabel": Array [
-          5,
-          5,
+        "multiCentroid": Array [
+          Array [
+            5,
+            5,
+          ],
+          Array [
+            5,
+            5,
+          ],
+        ],
+        "multiPolylabels": Array [
+          Array [
+            5,
+            5,
+          ],
+          Array [
+            5,
+            5,
+          ],
         ],
         "properties": "createNodeId",
         "sourceName": "test-source",
@@ -107,6 +158,328 @@ exports[`creates ArcGisFeature nodes 2`] = `
     ],
   ],
   "results": Array [
+    Object {
+      "type": "return",
+      "value": undefined,
+    },
+    Object {
+      "type": "return",
+      "value": undefined,
+    },
+  ],
+}
+`;
+
+exports[`supports MultiPolygon features with additional fields 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "
+    \\"A GeoJSON feature from an ArcGIS feature service.\\"
+    type ArcGisFeature implements Node @dontInfer {
+      \\"The feature's ID within the ArcGIS feature service.\\"
+      featureId: ID!
+
+      \\"GeoJSON geometry data. Child fields do **not** need to be queried individually.\\"
+      geometry: JSON
+
+      \\"The center point within a feature.\\"
+      centroid: [Float!]
+
+      \\"If the feature is a Polygon, this is the optimal point within the polygon for a label.\\"
+      polylabel: [Float!]
+
+      \\"If the feature is a MultiPolygon, this is an array of center points within each polygon.\\"
+      multiCentroids: [[Float!]]
+
+      \\"If the feature is a MultiPolygon, this is an array of optimal points within each polygon for a label.\\"
+      multiPolylabels: [[Float!]]
+
+      \\"If provided in the plugin options, this is the name given to the plugin to categorize multiple feature services.\\"
+      sourceName: String
+
+      \\"The feature's GeoJSON type.\\"
+      type: String!
+
+      \\"The feature's GeoJSON type.\\"
+      properties: ArcGisFeatureProperties @link
+    }
+  ",
+    ],
+    Array [
+      "
+    \\"ArcGIS GeoJSON feature properties.\\"
+    type ArcGisFeatureProperties implements Node @infer {
+      \\"If provided in the plugin options, this is the name given to the plugin to categorize multiple feature services.\\"
+      sourceName: String
+    }
+  ",
+    ],
+    Array [
+      "
+    \\"A GeoJSON feature from an ArcGIS feature service.\\"
+    type ArcGisFeature implements Node @dontInfer {
+      \\"The feature's ID within the ArcGIS feature service.\\"
+      featureId: ID!
+
+      \\"GeoJSON geometry data. Child fields do **not** need to be queried individually.\\"
+      geometry: JSON
+
+      \\"The center point within a feature.\\"
+      centroid: [Float!]
+
+      \\"If the feature is a Polygon, this is the optimal point within the polygon for a label.\\"
+      polylabel: [Float!]
+
+      \\"If the feature is a MultiPolygon, this is an array of center points within each polygon.\\"
+      multiCentroids: [[Float!]]
+
+      \\"If the feature is a MultiPolygon, this is an array of optimal points within each polygon for a label.\\"
+      multiPolylabels: [[Float!]]
+
+      \\"If provided in the plugin options, this is the name given to the plugin to categorize multiple feature services.\\"
+      sourceName: String
+
+      \\"The feature's GeoJSON type.\\"
+      type: String!
+
+      \\"The feature's GeoJSON type.\\"
+      properties: ArcGisFeatureProperties @link
+    }
+  ",
+    ],
+    Array [
+      "
+    \\"ArcGIS GeoJSON feature properties.\\"
+    type ArcGisFeatureProperties implements Node @infer {
+      \\"If provided in the plugin options, this is the name given to the plugin to categorize multiple feature services.\\"
+      sourceName: String
+    }
+  ",
+    ],
+  ],
+  "results": Array [
+    Object {
+      "type": "return",
+      "value": undefined,
+    },
+    Object {
+      "type": "return",
+      "value": undefined,
+    },
+    Object {
+      "type": "return",
+      "value": undefined,
+    },
+    Object {
+      "type": "return",
+      "value": undefined,
+    },
+  ],
+}
+`;
+
+exports[`supports MultiPolygon features with additional fields 2`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      Object {
+        "centroid": Array [
+          5,
+          5,
+        ],
+        "featureId": "id",
+        "geometry": Object {
+          "coordinates": Array [
+            Array [
+              Array [
+                Array [
+                  0,
+                  0,
+                ],
+                Array [
+                  10,
+                  0,
+                ],
+                Array [
+                  10,
+                  10,
+                ],
+                Array [
+                  0,
+                  10,
+                ],
+              ],
+            ],
+            Array [
+              Array [
+                Array [
+                  0,
+                  0,
+                ],
+                Array [
+                  10,
+                  0,
+                ],
+                Array [
+                  10,
+                  10,
+                ],
+                Array [
+                  0,
+                  10,
+                ],
+              ],
+            ],
+          ],
+          "type": "MultiPolygon",
+        },
+        "id": "createNodeId",
+        "internal": Object {
+          "contentDigest": "createContentDigest",
+          "type": "ArcGisFeature",
+        },
+        "multiCentroid": Array [
+          Array [
+            5,
+            5,
+          ],
+          Array [
+            5,
+            5,
+          ],
+        ],
+        "multiPolylabels": Array [
+          Array [
+            5,
+            5,
+          ],
+          Array [
+            5,
+            5,
+          ],
+        ],
+        "properties": "createNodeId",
+        "sourceName": "test-source",
+        "type": undefined,
+      },
+    ],
+    Array [
+      Object {
+        "bar": "baz",
+        "foo": "bar",
+        "id": "createNodeId",
+        "internal": Object {
+          "contentDigest": "createContentDigest",
+          "type": "ArcGisFeatureProperties",
+        },
+        "sourceName": "test-source",
+      },
+    ],
+    Array [
+      Object {
+        "centroid": Array [
+          5,
+          5,
+        ],
+        "featureId": "id",
+        "geometry": Object {
+          "coordinates": Array [
+            Array [
+              Array [
+                Array [
+                  0,
+                  0,
+                ],
+                Array [
+                  10,
+                  0,
+                ],
+                Array [
+                  10,
+                  10,
+                ],
+                Array [
+                  0,
+                  10,
+                ],
+              ],
+            ],
+            Array [
+              Array [
+                Array [
+                  0,
+                  0,
+                ],
+                Array [
+                  10,
+                  0,
+                ],
+                Array [
+                  10,
+                  10,
+                ],
+                Array [
+                  0,
+                  10,
+                ],
+              ],
+            ],
+          ],
+          "type": "MultiPolygon",
+        },
+        "id": "createNodeId",
+        "internal": Object {
+          "contentDigest": "createContentDigest",
+          "type": "ArcGisFeature",
+        },
+        "multiCentroid": Array [
+          Array [
+            5,
+            5,
+          ],
+          Array [
+            5,
+            5,
+          ],
+        ],
+        "multiPolylabels": Array [
+          Array [
+            5,
+            5,
+          ],
+          Array [
+            5,
+            5,
+          ],
+        ],
+        "properties": "createNodeId",
+        "sourceName": "test-source",
+        "type": undefined,
+      },
+    ],
+    Array [
+      Object {
+        "bar": "baz",
+        "foo": "bar",
+        "id": "createNodeId",
+        "internal": Object {
+          "contentDigest": "createContentDigest",
+          "type": "ArcGisFeatureProperties",
+        },
+        "sourceName": "test-source",
+      },
+    ],
+  ],
+  "results": Array [
+    Object {
+      "type": "return",
+      "value": undefined,
+    },
+    Object {
+      "type": "return",
+      "value": undefined,
+    },
     Object {
       "type": "return",
       "value": undefined,

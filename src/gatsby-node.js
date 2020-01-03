@@ -1,6 +1,7 @@
 import url from 'url'
 import got from 'got'
 import polylabel from 'polylabel'
+import centroid from '@turf/centroid'
 
 // Default parameters for the ArcGIS feature service request: fetch all
 // features and fields in GeoJSON format.
@@ -18,6 +19,9 @@ const FEATURE_TYPE = 'ArcGisFeature'
 
 // ArcGIS feature properties type name.
 const FEATURE_PROPERTIES_TYPE = 'ArcGisFeatureProperties'
+
+// Precision to calculate polylabel coordinates.
+const POLYLABEL_PRECISION = 0.1
 
 export const sourceNodes = async (gatsbyContext, pluginOptions) => {
   const { actions, createNodeId, createContentDigest } = gatsbyContext
@@ -39,8 +43,17 @@ export const sourceNodes = async (gatsbyContext, pluginOptions) => {
       "GeoJSON geometry data. Child fields do **not** need to be queried individually."
       geometry: JSON
 
-      "If the feature is a polygon, this is the optimal point within the polygon for a label."
+      "The center point within a feature."
+      centroid: [Float!]
+
+      "If the feature is a Polygon, this is the optimal point within the polygon for a label."
       polylabel: [Float!]
+
+      "If the feature is a MultiPolygon, this is an array of center points within each polygon."
+      multiCentroids: [[Float!]]
+
+      "If the feature is a MultiPolygon, this is an array of optimal points within each polygon for a label."
+      multiPolylabels: [[Float!]]
 
       "If provided in the plugin options, this is the name given to the plugin to categorize multiple feature services."
       sourceName: String
@@ -70,23 +83,40 @@ export const sourceNodes = async (gatsbyContext, pluginOptions) => {
     const propertiesId = createNodeId(
       [name, feature?.id, 'properties'].filter(Boolean).join(' '),
     )
+    const featureType = feature.geometry.type
 
-    createNode({
+    const node = {
       id: featureId,
       featureId: feature?.id,
       geometry: feature.geometry,
-      polylabel:
-        feature.geometry.type === 'Polygon'
-          ? polylabel(feature.geometry.coordinates, 0.1)
-          : null,
       sourceName: name,
       type: feature.type,
       properties: propertiesId,
+      centroid: centroid(feature.geometry).geometry.coordinates,
       internal: {
         type: FEATURE_TYPE,
         contentDigest: createContentDigest(feature),
       },
-    })
+    }
+
+    if (featureType === 'Polygon')
+      node.polylabel = polylabel(
+        feature.geometry.coordinates,
+        POLYLABEL_PRECISION,
+      )
+
+    if (featureType === 'MultiPolygon') {
+      node.multiPolylabels = feature.geometry.coordinates.map(coordinates =>
+        polylabel(coordinates, POLYLABEL_PRECISION),
+      )
+
+      node.multiCentroid = feature.geometry.coordinates.map(
+        coordinates =>
+          centroid({ type: 'Polygon', coordinates }).geometry.coordinates,
+      )
+    }
+
+    createNode(node)
 
     createNode({
       ...feature.properties,

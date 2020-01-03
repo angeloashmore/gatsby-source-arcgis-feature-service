@@ -4,8 +4,25 @@ import * as plugin from './gatsby-node'
 const mockFeature = {
   id: 'id',
   geometry: {
-    type: 'Polygon',
-    coordinates: [[[0, 0], [10, 0], [10, 10], [0, 10]]],
+    type: 'MultiPolygon',
+    coordinates: [
+      [
+        [
+          [0, 0],
+          [10, 0],
+          [10, 10],
+          [0, 10],
+        ],
+      ],
+      [
+        [
+          [0, 0],
+          [10, 0],
+          [10, 10],
+          [0, 10],
+        ],
+      ],
+    ],
   },
   // Arbitrary properties from the ArcGIS feature service.
   properties: {
@@ -43,6 +60,23 @@ const gatsbyContext = {
 }
 
 test('creates ArcGisFeature nodes', async () => {
+  const pluginOptions = {
+    name: 'test-source',
+    url: 'https://example.com',
+  }
+
+  await plugin.sourceNodes(gatsbyContext, pluginOptions)
+
+  expect(got).toHaveBeenCalledWith('https://example.com/0/query', {
+    json: true,
+    query: { f: 'geojson', outFields: '*', where: '1=1' },
+  })
+
+  expect(gatsbyContext.actions.createTypes).toMatchSnapshot()
+  expect(gatsbyContext.actions.createNode).toMatchSnapshot()
+})
+
+test('supports MultiPolygon features with additional fields', async () => {
   const pluginOptions = {
     name: 'test-source',
     url: 'https://example.com',

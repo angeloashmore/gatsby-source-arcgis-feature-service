@@ -43,6 +43,7 @@
     "standard-version": "^7.0.1"
   },
   "dependencies": {
+    "@turf/centroid": "^6.0.2",
     "got": "^9.6.0",
     "polylabel": "^1.0.2"
   },
