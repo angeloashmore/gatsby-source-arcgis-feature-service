@@ -1,6 +1,6 @@
 {
   "name": "gatsby-source-arcgis-feature-service",
-  "version": "0.4.0-beta.0",
+  "version": "0.4.0",
   "description": "Gatsby source plugin for building websites using an ArcGIS Feature Service as a data source",
   "scripts": {
     "build": "NODE_ENV=production rollup -c",
