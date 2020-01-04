@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.2-beta.0](https://github.com/angeloashmore/gatsby-source-arcgis-feature-service/compare/v0.4.1...v0.4.2-beta.0) (2020-01-04)
+
+
+### Bug Fixes
+
+* change use of got for v10 ([1c7f3a2](https://github.com/angeloashmore/gatsby-source-arcgis-feature-service/commit/1c7f3a2c7c97ecb22a5fa475d730972536fe3a4b))
+
 ### [0.4.1](https://github.com/angeloashmore/gatsby-source-arcgis-feature-service/compare/v0.4.0...v0.4.1) (2020-01-04)
 
 ## [0.4.0](https://github.com/angeloashmore/gatsby-source-arcgis-feature-service/compare/v0.4.0-beta.0...v0.4.0) (2020-01-04)
