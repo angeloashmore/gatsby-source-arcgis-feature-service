@@ -30,8 +30,8 @@ export const sourceNodes = async (gatsbyContext, pluginOptions) => {
 
   const resolvedURL = url.resolve(serverURL, URL_PATH)
   const response = await got(resolvedURL, {
-    json: true,
-    query: { ...DEFAULT_PARAMS, ...params },
+    responseType: 'json',
+    searchParams: { ...DEFAULT_PARAMS, ...params },
   })
 
   createTypes(`

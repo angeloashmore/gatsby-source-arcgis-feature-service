@@ -36,6 +36,7 @@
     "eslint-plugin-jest": "^23.2.0",
     "husky": "^3.1.0",
     "jest": "^24.9.0",
+    "nock": "^11.7.1",
     "prettier": "^1.19.1",
     "rollup": "^1.27.14",
     "rollup-plugin-babel": "^4.3.3",

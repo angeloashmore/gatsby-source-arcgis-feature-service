@@ -1,6 +1,10 @@
-import got from 'got'
+import nock from 'nock'
 import * as plugin from './gatsby-node'
 
+const mockPluginOptions = {
+  name: 'test-source',
+  url: 'https://example.com',
+}
 const mockFeature = {
   id: 'id',
   geometry: {
@@ -33,20 +37,6 @@ const mockFeature = {
   foo: 'bar',
 }
 
-// got is used to fetch JSON data from the ArcGIS Feature service. We need to
-// mock its return value in tests.
-jest.mock('got')
-got.mockImplementation((url, options) => {
-  // Ensure we are telling got to parse JSON response data.
-  if (!options.json) throw new Error('Did not request JSON data from server.')
-
-  // Ensure we are requesting GeoJSON data from the server.
-  if (options.query.f !== 'geojson')
-    throw new Error('Did not request GeoJSON data from server.')
-
-  return { body: { features: [mockFeature] } }
-})
-
 const gatsbyContext = {
   actions: {
     createNode: jest.fn(),
@@ -60,34 +50,22 @@ const gatsbyContext = {
 }
 
 test('creates ArcGisFeature nodes', async () => {
-  const pluginOptions = {
-    name: 'test-source',
-    url: 'https://example.com',
-  }
+  nock(mockPluginOptions.url)
+    .get('/0/query?f=geojson&where=1%3D1&outFields=*')
+    .reply(200, { features: [mockFeature] })
 
-  await plugin.sourceNodes(gatsbyContext, pluginOptions)
-
-  expect(got).toHaveBeenCalledWith('https://example.com/0/query', {
-    json: true,
-    query: { f: 'geojson', outFields: '*', where: '1=1' },
-  })
+  await plugin.sourceNodes(gatsbyContext, mockPluginOptions)
 
   expect(gatsbyContext.actions.createTypes).toMatchSnapshot()
   expect(gatsbyContext.actions.createNode).toMatchSnapshot()
 })
 
 test('supports MultiPolygon features with additional fields', async () => {
-  const pluginOptions = {
-    name: 'test-source',
-    url: 'https://example.com',
-  }
+  nock(mockPluginOptions.url)
+    .get('/0/query?f=geojson&where=1%3D1&outFields=*')
+    .reply(200, { features: [mockFeature] })
 
-  await plugin.sourceNodes(gatsbyContext, pluginOptions)
-
-  expect(got).toHaveBeenCalledWith('https://example.com/0/query', {
-    json: true,
-    query: { f: 'geojson', outFields: '*', where: '1=1' },
-  })
+  await plugin.sourceNodes(gatsbyContext, mockPluginOptions)
 
   expect(gatsbyContext.actions.createTypes).toMatchSnapshot()
   expect(gatsbyContext.actions.createNode).toMatchSnapshot()
@@ -95,15 +73,16 @@ test('supports MultiPolygon features with additional fields', async () => {
 
 test('allows setting/overriding query params from plugin options', async () => {
   const pluginOptions = {
-    name: 'test-source',
-    url: 'https://example.com',
+    ...mockPluginOptions,
     params: { where: '1=0', foo: 'bar' },
   }
 
+  nock(mockPluginOptions.url)
+    .get('/0/query?f=geojson&where=1%3D0&outFields=*&foo=bar')
+    .reply(200, { features: [mockFeature] })
+
   await plugin.sourceNodes(gatsbyContext, pluginOptions)
 
-  expect(got).toHaveBeenCalledWith('https://example.com/0/query', {
-    json: true,
-    query: { f: 'geojson', outFields: '*', where: '1=0', foo: 'bar' },
-  })
+  expect(gatsbyContext.actions.createTypes).toMatchSnapshot()
+  expect(gatsbyContext.actions.createNode).toMatchSnapshot()
 })
