@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.2](https://github.com/angeloashmore/gatsby-source-arcgis-feature-service/compare/v0.4.2-beta.0...v0.4.2) (2020-01-04)
+
 ### [0.4.2-beta.0](https://github.com/angeloashmore/gatsby-source-arcgis-feature-service/compare/v0.4.1...v0.4.2-beta.0) (2020-01-04)
 
 
