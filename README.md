@@ -229,7 +229,7 @@ exports.createPages = async ({ graphql, actions }) => {
 
   features.data.allArcGisFeature.nodes.forEach(node => {
     createPage({
-      path: `/${node.geoJsonId}`,
+      path: `/${node.featureId}`,
       component: path.resolve('./src/templates/feature.js'),
       context: {
         id: node.id,
