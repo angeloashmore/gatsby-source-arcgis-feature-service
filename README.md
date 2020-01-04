@@ -159,7 +159,8 @@ provided on the `multiPolylabels` field.
 Centroid data is provided on the `centroid` field for all features.
 
 `centroid` is the mean position of all the points in all of the coordinate
-directions. If `polylabel` is unavailable, `centroid` can be used instead.
+directions. If `polylabel` is unavailable, `centroid` can be used instead to
+place a marker or label.
 
 ```graphql
 {
