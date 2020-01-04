@@ -11,8 +11,8 @@ API][arcgis-feature-service-rest-api].
 - [How to use](#how-to-use)
 - [How to query](#how-to-query)
   - [Query Geometry](#query-geometry)
+  - [Query Geometry Helpers](#query-geometry-helpers)
   - [Query Properties](#query-properties)
-  - [Query Polylabel](#query-polylabel)
 - [Site's `gatsby-node.js` example](#sites-gatsby-nodejs-example)
 
 ## Features
@@ -117,6 +117,75 @@ stating its fields.
 }
 ```
 
+### Query Geometry Helpers
+
+#### Polylabel
+
+Polylabel data is provided on the `polylabel` field for `Polygon` features. If a
+feature is not a `Polygon`, `polylabel` will be `null`.
+
+`polylabel` is the optimal point within a polygon to place a marker or label
+provided as a [lng, lat] pair.
+
+See [Mapbox's official Polylabel documentation][polylabel] for more details.
+
+```graphql
+{
+  allArcGisFeature {
+    nodes {
+      id
+      polylabel
+    }
+  }
+}
+```
+
+If the feature is a `MultiPolygon`, polylabels for each individual polygon is
+provided on the `multiPolylabels` field.
+
+```graphql
+{
+  allArcGisFeature {
+    nodes {
+      id
+      multiPolylabels
+    }
+  }
+}
+```
+
+### Centroid
+
+Centroid data is provided on the `centroid` field for all features.
+
+`centroid` is the mean position of all the points in all of the coordinate
+directions. If `polylabel` is unavailable, `centroid` can be used instead.
+
+```graphql
+{
+  allArcGisFeature {
+    nodes {
+      id
+      centroid
+    }
+  }
+}
+```
+
+If the feature is a `MultiPolygon`, centroids for each individual polygon is
+provided on the `multiCentroids` field.
+
+```graphql
+{
+  allArcGisFeature {
+    nodes {
+      id
+      multiCentroid
+    }
+  }
+}
+```
+
 ### Query Properties
 
 Property data for each feature is provided on the `properties` field.
@@ -133,26 +202,6 @@ the ArcGIS Feature Service.
         name
         status
       }
-    }
-  }
-}
-```
-
-### Query Polylabel
-
-Polylabel data is provided on the `polylabel` field for `Polygon` features. If a feature is not a `Polygon`, `polylabel` will be `null`.
-
-`polylabel` is the optimal point within a polygon to place a marker or label
-provided as a [lng, lat] pair.
-
-See [Mapbox's official Polylabel documentation][polylabel] for more details.
-
-```graphql
-{
-  allArcGisFeature {
-    nodes {
-      id
-      polylabel
     }
   }
 }
