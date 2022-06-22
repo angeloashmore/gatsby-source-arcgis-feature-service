@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "@turf/centroid": "^6.0.2",
-    "got": "^10.2.1",
+    "got": "^11.8.5",
     "polylabel": "^1.0.2"
   },
   "peerDependencies": {},
